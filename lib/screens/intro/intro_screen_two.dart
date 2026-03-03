@@ -9,10 +9,10 @@ class IntroScreenTwo extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset("assets/images/logo.png"),
+        Image.asset("assets/images/screen_two.png"),
         SizedBox(height: 40),
         Text(
-          "We Need To Work Hard",
+          "Experience Misty Hills & Waterfalls",
           style: TextStyle(
             color: AppColors.backgroundDark,
             fontSize: 25,
@@ -23,7 +23,7 @@ class IntroScreenTwo extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            "We Need To Work Hard We Need To Work Hard We Need To Work Hard We Need To Work Hard We Need To Work Hard",
+            "Explore lush green coffee plantations. Witness the beauty of hidden, cascading waterfalls. Feel the pure mist of the unique Coorg Explorer trails.",
             style: TextStyle(
               color: AppColors.backgroundDark.withOpacity(0.6),
               fontSize: 16,

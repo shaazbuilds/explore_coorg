@@ -1,5 +1,6 @@
 import 'package:explore_coorg/home_page.dart';
 import 'package:explore_coorg/screens/intro/intro_page_controller.dart';
+import 'package:explore_coorg/services/preferences_service.dart';
 import 'package:explore_coorg/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +16,18 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => IntroPageController()),
-      );
+    Future.delayed(const Duration(seconds: 5), () async {
+      final hasSeenIntro = await PreferencesService.hasSeenIntro();
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                hasSeenIntro ? HomePage() : IntroPageController(),
+          ),
+        );
+      }
     });
   }
 

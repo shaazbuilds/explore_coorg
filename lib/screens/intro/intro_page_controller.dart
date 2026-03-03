@@ -3,6 +3,7 @@ import 'package:explore_coorg/screens/intro/intro_page_four.dart';
 import 'package:explore_coorg/screens/intro/intro_page_three.dart';
 import 'package:explore_coorg/screens/intro/intro_screen_one.dart';
 import 'package:explore_coorg/screens/intro/intro_screen_two.dart';
+import 'package:explore_coorg/services/preferences_service.dart';
 import 'package:explore_coorg/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -22,7 +23,7 @@ class _IntroPageControllerState extends State<IntroPageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
+      backgroundColor: AppColors.pureWhite,
       body: Stack(
         children: [
           PageView(
@@ -49,7 +50,8 @@ class _IntroPageControllerState extends State<IntroPageController> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    await PreferencesService.markIntroAsSeen();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => HomePage()),

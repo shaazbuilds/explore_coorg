@@ -15,6 +15,7 @@ class AppColors {
   static const Color backgroundLight = Color(0xFFF1F8F1); // Barely-green white
   static const Color surfaceLight = Color(0xFFFFFFFF);
   static const Color cardLight = Color(0xFFE8F5E9); // Mint card bg
+  static const Color pureWhite = Color(0xFFFFFFFF); // pure white
 
   // Dark mode
   static const Color backgroundDark = Color(0xFF0A1A0A); // Deep forest night

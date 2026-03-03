@@ -9,10 +9,10 @@ class IntroScreenOne extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset("assets/images/logo.png"),
+        Image.asset("assets/images/screen_one.png"),
         SizedBox(height: 40),
         Text(
-          "We Need To Work Hard",
+          "The Journey Begins in Coorg",
           style: TextStyle(
             color: AppColors.backgroundDark,
             fontSize: 25,
@@ -23,7 +23,7 @@ class IntroScreenOne extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
-            "We Need To Work Hard We Need To Work Hard We Need To Work Hard We Need To Work Hard We Need To Work Hard",
+            "Embark on your adventure with Coorg Explorer. Locate the heart of this stunning hill station and unlock the secrets of its landscapes",
             style: TextStyle(
               color: AppColors.backgroundDark.withOpacity(0.6),
               fontSize: 16,
