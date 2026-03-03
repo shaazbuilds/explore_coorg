@@ -16,65 +16,140 @@ class IntroPageController extends StatefulWidget {
 }
 
 class _IntroPageControllerState extends State<IntroPageController> {
-  PageController pageController = PageController();
-  String buttonText = "Skip";
-  int currentPageIndex = 0;
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+  final int _totalPages = 4;
+
+  bool get _isLastPage => _currentPage == _totalPages - 1;
+
+  Future<void> _finishIntro() async {
+    await PreferencesService.markIntroAsSeen();
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    }
+  }
+
+  void _goToNextPage() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pureWhite,
-      body: Stack(
-        children: [
-          PageView(
-            controller: pageController,
-            onPageChanged: (index) {
-              currentPageIndex = index;
-              if (index == 3) {
-                buttonText = "Finish";
-              } else {
-                buttonText = "Skip";
-              }
-              setState(() {});
-            },
-            children: [
-              IntroScreenOne(),
-              IntroScreenTwo(),
-              IntroPageThree(),
-              IntroPageFour(),
-            ],
-          ),
-          Container(
-            alignment: Alignment(0, 0.8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    await PreferencesService.markIntroAsSeen();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  },
-                  child: Text(buttonText),
-                ),
-                SmoothPageIndicator(controller: pageController, count: 4),
-                currentPageIndex == 3
-                    ? const Text("")
-                    : GestureDetector(
-                        onTap: () {
-                          pageController.nextPage(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.easeIn,
-                          );
-                        },
-                        child: Text("Next"),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ── Skip button ──────────────────────────────────
+            SizedBox(
+              height: 48,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: _isLastPage ? 0.0 : 1.0,
+                    child: TextButton(
+                      onPressed: _isLastPage ? null : _finishIntro,
+                      child: Text(
+                        "Skip",
+                        style: TextStyle(
+                          color: AppColors.backgroundDark.withOpacity(0.45),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-              ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+
+            // ── PageView ─────────────────────────────────────
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) => setState(() => _currentPage = index),
+                children: const [
+                  IntroScreenOne(),
+                  IntroScreenTwo(),
+                  IntroPageThree(),
+                  IntroPageFour(),
+                ],
+              ),
+            ),
+
+            // ── Bottom bar: dots + next button ───────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(28, 16, 28, 32),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Smooth page indicator dots
+                  SmoothPageIndicator(
+                    controller: _pageController,
+                    count: _totalPages,
+                    effect: ExpandingDotsEffect(
+                      activeDotColor: AppColors.backgroundDark,
+                      dotColor: AppColors.backgroundDark.withOpacity(0.2),
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      expansionFactor: 3,
+                      spacing: 6,
+                    ),
+                  ),
+
+                  // Next / Get Started button
+                  GestureDetector(
+                    onTap: _isLastPage ? _finishIntro : _goToNextPage,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      height: 52,
+                      width: _isLastPage ? 148 : 52,
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundDark,
+                        borderRadius: BorderRadius.circular(
+                          _isLastPage ? 16 : 50,
+                        ),
+                      ),
+                      child: Center(
+                        child: _isLastPage
+                            ? const Text(
+                                "Get Started",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.3,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.arrow_forward_rounded,
+                                color: Colors.white,
+                                size: 22,
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
