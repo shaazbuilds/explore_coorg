@@ -1,4 +1,5 @@
 import 'package:explore_coorg/home_page.dart';
+import 'package:explore_coorg/screens/intro/intro_page_controller.dart';
 import 'package:explore_coorg/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => IntroPageController()),
       );
     });
   }
