@@ -9,8 +9,21 @@ class AboutScreen extends StatelessWidget {
   static const String _version = "1.0.0";
   static const String _buildNumber = "42";
 
+  // Future<void> _launchUrl(String url) async {
+  //   final uri = Uri.parse(url);
+  //   if (await canLaunchUrl(uri)) {
+  //     await launchUrl(uri, mode: LaunchMode.externalApplication);
+  //   }
+  // }
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
+
+    // mailto links skip canLaunchUrl check — it's unreliable on Android
+    if (uri.scheme == 'mailto') {
+      await launchUrl(uri);
+      return;
+    }
+
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
@@ -246,8 +259,8 @@ class AboutScreen extends StatelessWidget {
                       _FeatureItem(
                         icon: Icons.cabin_rounded,
                         label: "Stays & Hotels",
-                        desc:
-                            "Find the best resorts, heritage stays and cosy homestays for every budget.",
+                        desc: "FEATURE COMING SOON",
+                        //  "Find the best resorts, heritage stays and cosy homestays for every budget.",
                         isDark: isDark,
                         cardBg: cardBg,
                         divider: divider,
@@ -258,8 +271,8 @@ class AboutScreen extends StatelessWidget {
                       _FeatureItem(
                         icon: Icons.eco_rounded,
                         label: "Plantation Experiences",
-                        desc:
-                            "Explore coffee, spice, and pepper estates with guided tour information.",
+                        desc: "FEATURE COMING SOON",
+                        // "Explore coffee, spice, and pepper estates with guided tour information.",
                         isDark: isDark,
                         cardBg: cardBg,
                         divider: divider,
@@ -379,8 +392,9 @@ class AboutScreen extends StatelessWidget {
                           textSec: textSec,
                           divider: divider,
                           accent: accent,
-                          onTap: () =>
-                              _launchUrl("https://play.google.com/store"),
+                          onTap: () => _launchUrl(
+                            "https://play.google.com/store/apps/details?id=com.shaazbuilds.explore_coorg",
+                          ),
                         ),
                         _LinkRow(
                           icon: Icons.bug_report_outlined,
@@ -391,7 +405,7 @@ class AboutScreen extends StatelessWidget {
                           divider: divider,
                           accent: accent,
                           onTap: () =>
-                              _launchUrl("mailto:support@coorgexplorer.app"),
+                              _launchUrl("mailto:shaaz.builds@gmail.com"),
                           isLast: true,
                         ),
                       ],
