@@ -1,23 +1,35 @@
+import 'package:explore_coorg/providers/favourites_provider.dart';
 import 'package:explore_coorg/splash_screen.dart';
 import 'package:explore_coorg/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // transparent bar background
+    ),
+  );
+  runApp(const CoorgExplorerApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CoorgExplorerApp extends StatelessWidget {
+  const CoorgExplorerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Explore Coorg',
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system, // or user-controlled
-      home: SplashScreen(),
+    return FavouritesProvider(
+      // ← wrap here
+      notifier: FavouritesNotifier(),
+      child: MaterialApp(
+        title: 'Coorg Explorer',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.system,
+        home: const SplashScreen(),
+      ),
     );
   }
 }

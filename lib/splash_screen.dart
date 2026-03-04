@@ -90,24 +90,28 @@ class _SplashScreenState extends State<SplashScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // App icon / emblem
-                    Container(
-                      width: 80,
+                    // Container(
+                    //   width: 80,
+                    //   height: 80,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white.withOpacity(0.15),
+                    //     shape: BoxShape.circle,
+                    //     border: Border.all(
+                    //       color: Colors.white.withOpacity(0.4),
+                    //       width: 1.5,
+                    //     ),
+                    //   ),
+                    //   child: const Icon(
+                    //     Icons.terrain_rounded,
+                    //     color: Colors.white,
+                    //     size: 38,
+                    //   ),
+                    // ),
+                    Image.asset(
+                      "assets/images/logo_round.png",
                       height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.4),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.terrain_rounded,
-                        color: Colors.white,
-                        size: 38,
-                      ),
+                      width: 80,
                     ),
-
                     const SizedBox(height: 24),
 
                     // App name
