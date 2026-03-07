@@ -2,15 +2,17 @@ import 'package:explore_coorg/providers/favourites_provider.dart';
 import 'package:explore_coorg/splash_screen.dart';
 import 'package:explore_coorg/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // transparent bar background
-    ),
+
+  await Supabase.initialize(
+    url: 'https://mhjuccfbygolnarckwhw.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oanVjY2ZieWdvbG5hcmNrd2h3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NjE4MDksImV4cCI6MjA4ODQzNzgwOX0.R03Us0FRGKmpeMd3nmohzOpGt8p3Tr6FAktYaY6DL58',
   );
+
   runApp(const CoorgExplorerApp());
 }
 

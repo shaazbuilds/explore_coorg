@@ -1,159 +1,10 @@
+import 'package:explore_coorg/models/tourist_place.dart';
 import 'package:explore_coorg/screens/home/place_detail_screen.dart';
+import 'package:explore_coorg/services/place_service.dart';
 import 'package:explore_coorg/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
-// ── Data model ────────────────────────────────────────────
-class TouristPlace {
-  final String name;
-  final String description;
-  final String category;
-  final String imagePath;
-  final String location;
-  final String emoji;
-
-  const TouristPlace({
-    required this.name,
-    required this.description,
-    required this.category,
-    required this.imagePath,
-    required this.location,
-    required this.emoji,
-  });
-}
-
-// ── Sample data ───────────────────────────────────────────
-const List<TouristPlace> allPlaces = [
-  TouristPlace(
-    name: "Abbey Falls",
-    description:
-        "A stunning 70ft waterfall surrounded by lush coffee and spice plantations.",
-    category: "Waterfalls",
-    imagePath: "assets/images/abbey_falls.jpg",
-    location: "Madikeri",
-    emoji: "💧",
-  ),
-  TouristPlace(
-    name: "Iruppu Falls",
-    description:
-        "Sacred waterfall near Brahmagiri Wildlife Sanctuary, perfect for trekking.",
-    category: "Waterfalls",
-    imagePath: "assets/images/iruppu_falls.jpg",
-    location: "Gonikoppal",
-    emoji: "💧",
-  ),
-  TouristPlace(
-    name: "Chelavara Falls",
-    description:
-        "A serene, lesser-known waterfall framed by dense mist and greenery.",
-    category: "Waterfalls",
-    imagePath: "assets/images/chelavara_falls.jpg",
-    location: "Napoklu",
-    emoji: "💧",
-  ),
-  TouristPlace(
-    name: "Kote Abby Falls",
-    description:
-        "A serene, lesser-known 70-foot waterfall near Hattihole, Mukkodlu village, roughly 25 km from Madikeri, Coorg, offering a tranquil alternative to crowded tourist spots. Nestled in coffee plantations",
-    category: "Waterfalls",
-    imagePath: "assets/images/kotteabbyfalls.jpg",
-    location: "Hattihole",
-    emoji: "💧",
-  ),
-
-  TouristPlace(
-    name: "Nagarhole National Park",
-    description:
-        "Home to tigers, elephants, and leopards in dense deciduous forests.",
-    category: "Wildlife",
-    imagePath: "assets/images/nagarhole.jpg",
-    location: "Virajpet",
-    emoji: "🐘",
-  ),
-  TouristPlace(
-    name: "Kaveri Nisargadhama",
-    description:
-        "A tranquil river island eco-tourism spot in Coorg, Karnataka, known for its lush bamboo groves, sandalwood/teak trees, deer park, and activities like boat rides, nature walks, birds park, and a children's play",
-    category: "Wildlife",
-    imagePath: "assets/images/nisargadhama.jpg",
-    location: "Kushalnagar",
-    emoji: "🐘",
-  ),
-  TouristPlace(
-    name: "Dubare Elephant Camp",
-    description:
-        "An unforgettable experience bathing and feeding elephants on the Cauvery riverbank.",
-    category: "Wildlife",
-    imagePath: "assets/images/dubare.jpg",
-    location: "Kushalnagar",
-    emoji: "🐘",
-  ),
-
-  TouristPlace(
-    name: "Omkareshwara Temple",
-    description:
-        "A 200-year-old temple blending Islamic and Gothic architecture.",
-    category: "Temples",
-    imagePath: "assets/images/omkareshwara.jpg",
-    location: "Madikeri",
-    emoji: "🛕",
-  ),
-  TouristPlace(
-    name: "Bhagamandala",
-    description:
-        "Sacred confluence of the Cauvery, Kannike, and Sujyothi rivers.",
-    category: "Temples",
-    imagePath: "assets/images/bhagamandala.jpg",
-    location: "Bhagamandala",
-    emoji: "🛕",
-  ),
-  TouristPlace(
-    name: "Raja's Seat",
-    description:
-        "A breathtaking sunset viewpoint once used by Coorg kings for evening relaxation.",
-    category: "Viewpoints",
-    imagePath: "assets/images/rajas_seat.png",
-    location: "Madikeri",
-    emoji: "🌅",
-  ),
-  TouristPlace(
-    name: "Mandalpatti",
-    description:
-        "Mist-wrapped hilltop offering sweeping views of the Western Ghats valleys.",
-    category: "Viewpoints",
-    imagePath: "assets/images/mandalpatti.jpg",
-    location: "Madikeri",
-    emoji: "🌅",
-  ),
-  TouristPlace(
-    name: "Tadiandamol Peak",
-    description:
-        "The highest peak in Coorg at 1,748m with panoramic monsoon-season views.",
-    category: "Trekking",
-    imagePath: "assets/images/tadiandamol.jpg",
-    location: "Kakkabe",
-    emoji: "🥾",
-  ),
-  TouristPlace(
-    name: "Kotte Betta Peak",
-    description:
-        "Coorg's third-highest peak features a moderate 10km trek through coffee estates and Shola forests. The summit hosts an ancient Shiva temple with panoramic views and mystical Pandava-era stone structures.",
-    category: "Trekking",
-    imagePath: "assets/images/kotebetta.jpg",
-    location: "Madapura",
-    emoji: "🥾",
-  ),
-  TouristPlace(
-    name: "Brahmagiri Trek",
-    description:
-        "A moderately challenging trek through misty forests to a scenic hilltop.",
-    category: "Trekking",
-    imagePath: "assets/images/brahmagiri.jpg",
-    location: "Virajpet",
-    emoji: "🥾",
-  ),
-];
-
-// ── Categories with icons ─────────────────────────────────
+// ── Categories ────────────────────────────────────────────
 const List<Map<String, dynamic>> _categories = [
   {"label": "All", "icon": Icons.grid_view_rounded},
   {"label": "Waterfalls", "icon": Icons.water_rounded},
@@ -163,7 +14,6 @@ const List<Map<String, dynamic>> _categories = [
   {"label": "Trekking", "icon": Icons.hiking_rounded},
 ];
 
-// ── Per-category accent colors (semantic, not brand) ──────
 const Map<String, Color> _categoryAccents = {
   "All": AppColors.primary,
   "Waterfalls": Color(0xFF1565C0),
@@ -184,14 +34,35 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String _selectedCategory = "All";
   String _searchQuery = "";
 
-  List<TouristPlace> get _filteredPlaces => allPlaces.where((p) {
-    final matchCat =
-        _selectedCategory == "All" || p.category == _selectedCategory;
-    final matchSrch =
-        p.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        p.location.toLowerCase().contains(_searchQuery.toLowerCase());
-    return matchCat && matchSrch;
-  }).toList();
+  // Holds the one active future — recreated only when category changes
+  late Future<List<TouristPlace>> _placesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _placesFuture = PlaceService.fetchPlaces();
+  }
+
+  void _onCategorySelected(String category) {
+    setState(() {
+      _selectedCategory = category;
+      _placesFuture = PlaceService.fetchPlaces(category: category);
+      _searchQuery = ""; // reset search on category switch
+    });
+  }
+
+  // Client-side search filter applied on top of fetched list
+  List<TouristPlace> _applySearch(List<TouristPlace> places) {
+    if (_searchQuery.isEmpty) return places;
+    final q = _searchQuery.toLowerCase();
+    return places
+        .where(
+          (p) =>
+              p.name.toLowerCase().contains(q) ||
+              p.location.toLowerCase().contains(q),
+        )
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +132,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 14),
 
                     // Title
@@ -293,7 +163,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 20),
 
                     // Search bar
@@ -348,7 +217,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
             ),
 
-            // ── Category chips ────────────────────────────────
+            // ── Category chips ───────────────────────────────
             SliverToBoxAdapter(
               child: SizedBox(
                 height: 44,
@@ -357,33 +226,30 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   itemCount: _categories.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 8),
-                  itemBuilder: (context, index) {
-                    final cat = _categories[index];
-                    final String label = cat["label"] as String;
-                    final IconData icon = cat["icon"] as IconData;
-                    final bool isSelected = label == _selectedCategory;
-                    final Color accent =
-                        _categoryAccents[label] ?? AppColors.primary;
-
+                  itemBuilder: (context, i) {
+                    final cat = _categories[i];
+                    final label = cat["label"] as String;
+                    final isActive = label == _selectedCategory;
+                    final accent = _categoryAccents[label] ?? AppColors.primary;
                     return GestureDetector(
-                      onTap: () => setState(() => _selectedCategory = label),
+                      onTap: () => _onCategorySelected(label),
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 220),
-                        curve: Curves.easeInOut,
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        duration: const Duration(milliseconds: 250),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
-                          color: isSelected
+                          color: isActive
                               ? accent
-                              : (isDark ? AppColors.cardDark : Colors.white),
+                              : isDark
+                              ? AppColors.cardDark
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(22),
                           border: Border.all(
-                            color: isSelected
-                                ? accent
-                                : (isDark
-                                      ? AppColors.dividerDark
-                                      : AppColors.dividerLight),
+                            color: isActive ? accent : divider,
                           ),
-                          boxShadow: isSelected
+                          boxShadow: isActive
                               ? [
                                   BoxShadow(
                                     color: accent.withOpacity(0.35),
@@ -394,21 +260,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               : [],
                         ),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              icon,
+                              cat["icon"] as IconData,
                               size: 14,
-                              color: isSelected ? Colors.white : textSec,
+                              color: isActive ? Colors.white : textSec,
                             ),
                             const SizedBox(width: 6),
                             Text(
                               label,
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w600,
-                                color: isSelected ? Colors.white : textSec,
-                                letterSpacing: 0.1,
+                                color: isActive ? Colors.white : textSec,
                               ),
                             ),
                           ],
@@ -420,103 +284,118 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
             ),
 
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
-            // ── Section label + count ─────────────────────────
+            // ── Places list via FutureBuilder ────────────────
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 4,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryLight,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      _selectedCategory == "All"
-                          ? "All Places"
-                          : _selectedCategory,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: textPri,
-                        letterSpacing: -0.2,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(
-                          isDark ? 0.3 : 0.1,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        "${_filteredPlaces.length}",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+              child: FutureBuilder<List<TouristPlace>>(
+                future: _placesFuture,
+                builder: (context, snapshot) {
+                  // ── Loading ──────────────────────────────
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 60),
+                      child: Center(
+                        child: CircularProgressIndicator(
                           color: isDark
                               ? AppColors.primaryBright
                               : AppColors.primary,
+                          strokeWidth: 2.5,
                         ),
                       ),
+                    );
+                  }
+
+                  // ── Error ────────────────────────────────
+                  if (snapshot.hasError) {
+                    return Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.wifi_off_rounded,
+                            size: 40,
+                            color: textSec,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Couldn't load places",
+                            style: TextStyle(
+                              color: textSec,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          GestureDetector(
+                            onTap: () => setState(() {
+                              _placesFuture = PlaceService.fetchPlaces(
+                                category: _selectedCategory,
+                              );
+                            }),
+                            child: Text(
+                              "Tap to retry",
+                              style: TextStyle(
+                                color: isDark
+                                    ? AppColors.primaryBright
+                                    : AppColors.primary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  final filtered = _applySearch(snapshot.data ?? []);
+
+                  // ── Empty ────────────────────────────────
+                  if (filtered.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 60),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.search_off_rounded,
+                            size: 40,
+                            color: textSec,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "No places found",
+                            style: TextStyle(
+                              color: textSec,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  // ── List ─────────────────────────────────
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                    child: Column(
+                      children: filtered
+                          .map(
+                            (place) => _PlaceCard(
+                              place: place,
+                              cardBg: cardBg,
+                              textPri: textPri,
+                              textSec: textSec,
+                              isDark: isDark,
+                            ),
+                          )
+                          .toList(),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
-
-            // ── Empty state ───────────────────────────────────
-            if (_filteredPlaces.isEmpty)
-              SliverToBoxAdapter(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 60),
-                    child: Column(
-                      children: [
-                        const Text("🌿", style: TextStyle(fontSize: 48)),
-                        const SizedBox(height: 12),
-                        Text(
-                          "No places found",
-                          style: TextStyle(
-                            color: textSec,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-            // ── Places list ───────────────────────────────────
-            if (_filteredPlaces.isNotEmpty)
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _PlaceCard(
-                      place: _filteredPlaces[index],
-                      cardBg: cardBg,
-                      textPri: textPri,
-                      textSec: textSec,
-                      isDark: isDark,
-                    ),
-                    childCount: _filteredPlaces.length,
-                  ),
-                ),
-              ),
           ],
         ),
       ),
@@ -575,12 +454,29 @@ class _PlaceCard extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  Image.asset(
-                    place.imagePath,
+                  // Network image from Supabase Storage
+                  Image.network(
+                    place.imageUrl,
                     height: 190,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(
+                    loadingBuilder: (_, child, progress) => progress == null
+                        ? child
+                        : Container(
+                            height: 190,
+                            color: isDark
+                                ? AppColors.cardDark
+                                : AppColors.cardLight,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: isDark
+                                    ? AppColors.primaryBright
+                                    : AppColors.primary,
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          ),
+                    errorBuilder: (_, __, ___) => Container(
                       height: 190,
                       color: isDark ? AppColors.cardDark : AppColors.cardLight,
                       child: Center(
@@ -591,7 +487,7 @@ class _PlaceCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Gradient over image bottom
+                  // Gradient
                   Positioned(
                     bottom: 0,
                     left: 0,
@@ -680,9 +576,7 @@ class _PlaceCard extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 6),
-
                   Container(
                     width: 32,
                     height: 2,
@@ -691,9 +585,7 @@ class _PlaceCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-
                   const SizedBox(height: 8),
-
                   Text(
                     place.description,
                     style: TextStyle(

@@ -1,5 +1,5 @@
+import 'package:explore_coorg/models/tourist_place.dart';
 import 'package:explore_coorg/providers/favourites_provider.dart';
-import 'package:explore_coorg/screens/home/explore_screen.dart';
 import 'package:explore_coorg/screens/home/place_detail_screen.dart';
 import 'package:explore_coorg/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -218,8 +218,8 @@ class FavouritesScreen extends StatelessWidget {
                                   borderRadius: const BorderRadius.horizontal(
                                     left: Radius.circular(20),
                                   ),
-                                  child: Image.asset(
-                                    place.imagePath,
+                                  child: Image.network(
+                                    place.imageUrl,
                                     width: 110,
                                     height: 110,
                                     fit: BoxFit.cover,
